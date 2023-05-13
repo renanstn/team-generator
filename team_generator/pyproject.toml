@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "team-generator"
+version = "0.1.0"
+description = ""
+authors = ["Renan Santana <renan_ota@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.95.1"
+uvicorn = "^0.22.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
