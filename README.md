@@ -23,4 +23,4 @@ docker-compose up
 
 Acesse a documentação da api em:
 
-- http://localhost:8000/docs
+- `http://localhost:8000/docs`
