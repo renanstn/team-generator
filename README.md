@@ -11,3 +11,15 @@
 - Permitir que um usuário adicione seu nome na lista.
 - Permitir que um admin dispare a ação de gerar times.
 - Permitir a impressão dos times (PDF).
+
+## Desenvolvimento
+
+Suba o projeto com o comando:
+
+```sh
+docker-compose up
+```
+
+Acesse a documentação da api em:
+
+- http://localhost:8000/docs
