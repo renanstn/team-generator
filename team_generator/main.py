@@ -21,13 +21,14 @@ SQLModel.metadata.create_all(database_engine)
 async def hello():
     return {"hello": "world"}
 
+
 @app.get("/events")
 async def get_events():
-
     with Session(database_engine) as db_session:
         query = select(Event).where(Event.active == True)
         results = db_session.exec(query)
         return results.all()
+
 
 @app.post("/events")
 async def create_event(event: Event):
@@ -40,6 +41,7 @@ async def create_event(event: Event):
         return {"message": "The event name must be unique."}
     return event
 
+
 @app.post("/event/{event_id}")
 async def join_event(event_id: int, player: Player):
     with Session(database_engine) as db_session:
@@ -51,6 +53,7 @@ async def join_event(event_id: int, player: Player):
         db_session.commit()
         db_session.refresh(player)
     return player
+
 
 @app.get("/event/{event_id}/players")
 async def list_players(event_id: int):
