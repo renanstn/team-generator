@@ -1,6 +1,9 @@
 import random
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from sqlmodel import create_engine, SQLModel, Session, select
 from decouple import config
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +17,8 @@ DATABASE_URL = config(
 DATABASE_DEBUG = config("DATABASE_DEBUG", cast=bool, default=False)
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 database_engine = create_engine(DATABASE_URL, echo=DATABASE_DEBUG)
 SQLModel.metadata.create_all(database_engine)
@@ -22,6 +27,11 @@ SQLModel.metadata.create_all(database_engine)
 @app.get("/ping")
 async def ping():
     return {"message": "pong!"}
+
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/events")
