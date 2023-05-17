@@ -28,6 +28,7 @@ Acesse a documentação da api em:
 
 - `http://localhost:8000/docs`
 
-Caso queira visualizar os dados brutos no banco de dados, você pode utilizar o **Adminer**, que fica disponível em:
+Caso queira visualizar os dados brutos no banco de dados, você pode utilizar o 
+**Adminer**, que fica disponível em:
 
 - `http://localhost:8080`
