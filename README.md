@@ -6,8 +6,8 @@
 [![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=flat&logo=nginx&logoColor=white)](https://www.nginx.com/)
 [![GitHub Actions](https://img.shields.io/badge/githubactions-%232671E5.svg?style=flat&logo=githubactions&logoColor=white)](https://github.com/features/actions)
 
-![Lint Markdown](https://github.com/renanstn/team-generator/actions/workflows/markdown-lint.yaml/badge.svg)
-![Lint Dockerfile](https://github.com/renanstn/team-generator/actions/workflows/dockerfile-lint.yaml/badge.svg)
+[![Lint Markdown](https://github.com/renanstn/team-generator/actions/workflows/markdown-lint.yaml/badge.svg)](https://github.com/renanstn/team-generator/actions/workflows/markdown-lint.yaml)
+[![Lint Dockerfile](https://github.com/renanstn/team-generator/actions/workflows/dockerfile-lint.yaml/badge.svg)](https://github.com/renanstn/team-generator/actions/workflows/dockerfile-lint.yaml)
 
 ## Objetivos
 
@@ -27,3 +27,7 @@ docker-compose up
 Acesse a documentação da api em:
 
 - `http://localhost:8000/docs`
+
+Caso queira visualizar os dados brutos no banco de dados, você pode utilizar o **Adminer**, que fica disponível em:
+
+- `http://localhost:8080`
