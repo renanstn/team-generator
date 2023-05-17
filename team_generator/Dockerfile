@@ -3,7 +3,7 @@ FROM python:3.9 AS base
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 WORKDIR /code
-RUN pip install poetry==1.4.2
+RUN pip install --no-cache-dir poetry==1.4.2
 COPY pyproject.toml poetry.lock /code/
 
 FROM base AS development
