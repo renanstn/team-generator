@@ -16,4 +16,4 @@ FROM base AS production
 RUN poetry config virtualenvs.create false && \
     poetry install --without dev
 COPY . /code/
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$PORT"]
