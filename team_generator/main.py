@@ -1,3 +1,5 @@
+import random
+
 from fastapi import FastAPI
 from sqlmodel import create_engine, SQLModel, Session, select
 from decouple import config
@@ -17,9 +19,9 @@ database_engine = create_engine(DATABASE_URL, echo=DATABASE_DEBUG)
 SQLModel.metadata.create_all(database_engine)
 
 
-@app.get("/hello")
-async def hello():
-    return {"hello": "world"}
+@app.get("/ping")
+async def ping():
+    return {"message": "pong!"}
 
 
 @app.get("/events")
@@ -62,3 +64,28 @@ async def list_players(event_id: int):
         results = db_session.exec(query)
         players = results.all()
     return players
+
+
+@app.post("/event/{event_id}/start")
+async def generate_teams(event_id: int):
+    with Session(database_engine) as db_session:
+        query_event = select(Event).where(Event.id == event_id)
+        event = db_session.exec(query_event).one()
+        max_players_on_team = event.max_member_for_team
+
+        query_players = select(Player).where(Player.event_id == event_id)
+        players = db_session.exec(query_players).all()
+
+    # Shuffle players
+    random.shuffle(players)
+
+    # Divide teams
+    teams = {}
+    teams_generated = 0
+
+    for i in range(0, len(players), max_players_on_team):
+        team = players[i : i + max_players_on_team]
+        teams.update({f"team {teams_generated}": team})
+        teams_generated += 1
+
+    return {"teams": teams}
