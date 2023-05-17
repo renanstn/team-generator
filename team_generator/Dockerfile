@@ -16,5 +16,5 @@ FROM base AS production
 RUN poetry config virtualenvs.create false && \
     poetry install --without dev
 COPY . /code/
-RUN chmod +x run.sh
+RUN chmod +x /code/run.sh
 CMD ["run.sh"]
