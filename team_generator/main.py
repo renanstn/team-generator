@@ -31,7 +31,24 @@ async def ping():
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "eventos": [
+                {
+                    "title": "Volei",
+                    "data": "2023-01-01",
+                    "players": ["Renan", "Ju", "Mabel"],
+                },
+                {
+                    "title": "Tabacaria",
+                    "data": "2023-01-01",
+                    "players": ["Iza", "Will"],
+                },
+            ],
+        },
+    )
 
 
 @app.get("/events")
