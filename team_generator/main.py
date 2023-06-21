@@ -17,9 +17,12 @@ DATABASE_URL = config(
 DATABASE_DEBUG = config("DATABASE_DEBUG", cast=bool, default=False)
 
 app = FastAPI()
+
+# Prepare API to use Jinja2 templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Initialize database
 database_engine = create_engine(DATABASE_URL, echo=DATABASE_DEBUG)
 SQLModel.metadata.create_all(database_engine)
 
