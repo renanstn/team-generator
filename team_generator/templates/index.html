@@ -31,29 +31,91 @@
     <div class="container">
       <h1 class="title is-4">Incoming events</h1>
       <div class="columns">
-        {% for evento in eventos %}
+        {% for event in events %}
         <div class="column">
           <div class="panel">
             <div class="panel-heading">
-              {{ evento.title }}
+              {{ event.name }}
             </div>
             <div class="panel-block">
-              {{ evento.data }}
+              {{ event.date }}
             </div>
             <div class="panel-block">
               <strong>Players</strong>
             </div>
-            {% for player in evento.players %}
+            {% for player in event.players %}
             <div class="panel-block">{{ player }}</div>
             {% endfor %}
             <div class="panel-block">
-              <button class="button is-success is-fullwidth">Join</button>
+              <button id="join" class="button is-success is-fullwidth">Join</button>
             </div>
           </div>
         </div>
         {% endfor %}
   </section>
 
+  <div class="modal is-active" id="modal-join">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="box">
+        <div class="form">
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input class="input" type="text">
+            </div>
+          </div>
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link" id="submit">
+                Submit
+              </button>
+            </div>
+            <div class="control">
+              <button class="button is-link is-light" id="button-cancel">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
 </body>
 
 </html>
+
+<script>
+
+  const join_button = document.getElementById('join')
+  const close_button_outside = document.getElementsByClassName('modal-close')
+  const cancel_button = document.getElementById('button-cancel')
+  const modal = document.getElementById('modal-join')
+
+  function close_modal() {
+    modal.classList.remove('is-active')
+  }
+
+  join_button.addEventListener('click', function() {
+    modal.classList.add('is-active')
+  })
+
+  close_button_outside[0].addEventListener('click', function() {
+    close_modal()
+  })
+
+  cancel_button.addEventListener('click', function(event) {
+    event.preventDefault()
+    close_modal()
+  })
+
+  document.addEventListener('keydown', (event) => {
+    const e = event || window.event;
+    if (e.keyCode === 27) { // Escape key
+      close_modal()
+    }
+  })
+
+</script>
