@@ -1,18 +1,37 @@
 from datetime import datetime
-from typing import Optional
 
-from sqlmodel import Field, SQLModel
-
-
-class Event(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True)
-    name: str = Field(unique=True)
-    max_member_for_team: int
-    date: datetime
-    active: bool = True
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
-class Player(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True)
-    name: str = Field(unique=True)
-    event_id: Optional[int] = Field(foreign_key="event.id")
+class Base(DeclarativeBase):
+    pass
+
+
+class Event(Base):
+    __tablename__ = "event"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(255))
+    max_member_for_team: Mapped[int]
+    date: Mapped[datetime]
+    active: Mapped[bool] = True
+    players: Mapped["Player"] = relationship(
+        back_populates="event", cascade="all, delete-orphan"
+    )
+
+    def __repr__(self) -> str:
+        return self.name
+
+
+class Player(Base):
+    __tablename__ = "player"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(255))
+    event_id: Mapped[int] = mapped_column(ForeignKey("event.id"))
+
+    event: Mapped["Event"] = relationship(back_populates="players")
+
+    def __repr__(self) -> str:
+        return self.name
