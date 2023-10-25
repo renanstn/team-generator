@@ -8,6 +8,7 @@
 
 [![Lint Markdown](https://github.com/renanstn/team-generator/actions/workflows/markdown-lint.yaml/badge.svg)](https://github.com/renanstn/team-generator/actions/workflows/markdown-lint.yaml)
 [![Lint Dockerfile](https://github.com/renanstn/team-generator/actions/workflows/dockerfile-lint.yaml/badge.svg)](https://github.com/renanstn/team-generator/actions/workflows/dockerfile-lint.yaml)
+[![Pylint](https://github.com/renanstn/team-generator/actions/workflows/python-lint.yml/badge.svg)](https://github.com/renanstn/team-generator/actions/workflows/python-lint.yml)
 
 ## Objetivos
 
