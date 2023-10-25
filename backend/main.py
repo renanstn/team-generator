@@ -12,7 +12,7 @@ app = FastAPI()
 @app.get("/")
 async def hello():
     """
-    An endpoint for connection test purposes.
+    Endpoint for connection test purposes.
     """
     return {"Hello": "World"}
 
@@ -20,7 +20,7 @@ async def hello():
 @app.get("/test_db")
 async def test_database_connection(db: Session = Depends(get_db)):
     """
-    An endpoint for database connection test purposes.
+    Endpoint for database connection test purposes.
     """
     data = db.query(Hello).first()
     return {"Stored value": data.name} if data else {"The database is empty."}
