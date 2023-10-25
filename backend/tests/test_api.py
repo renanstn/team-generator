@@ -13,3 +13,8 @@ class TestAPI(unittest.TestCase):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"Hello": "World"})
+
+    def test_database_connection(self):
+        response = self.client.get("/test_db")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"Stored value": "test"})

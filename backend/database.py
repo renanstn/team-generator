@@ -5,7 +5,8 @@ from sqlalchemy.orm import sessionmaker
 
 
 DATABASE_URL = config(
-    "DATABASE_URL", default="postgresql://postgres:postgres@db:5432/postgres"
+    "DATABASE_URL",
+    default="sqlite:///./database.db",
 )
 DATABASE_DEBUG = config("DATABASE_DEBUG", cast=bool, default=False)
 
