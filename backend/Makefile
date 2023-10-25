@@ -6,3 +6,6 @@ run-dev:
 
 test:
 	python -m unittest discover
+
+format:
+	black .
