@@ -21,6 +21,7 @@ jobs:
       run: |
         pip install --no-cache-dir poetry==1.6.1
         poetry config virtualenvs.create false
+        cd backend
         poetry install
     - name: Install dependencies
       run: |
