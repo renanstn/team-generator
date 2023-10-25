@@ -38,4 +38,3 @@ Caso queira visualizar os dados brutos no banco de dados, você pode utilizar o
 ```sh
 docker-compose run --rm --no-deps api pytest
 ```
-
