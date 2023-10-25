@@ -16,7 +16,7 @@ services:
     depends_on:
       - db
 
-  app:
+  backend:
     build:
       context: ./backend
       target: development
