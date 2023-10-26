@@ -9,10 +9,22 @@ class HelloSchema(BaseModel):
 
 
 class GameSchema(BaseModel):
-    pass
+    id: int
+    name: str
+    date: date
 
 
 class GameInSchema(BaseModel):
     name: str
     date: date
     image: str = None
+
+
+class PlayerSchema(BaseModel):
+    id: int
+    name: str
+    game_id: int
+
+
+class PlayerInSchema(BaseModel):
+    name: str
