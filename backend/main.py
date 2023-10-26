@@ -23,4 +23,7 @@ async def test_database_connection(db: Session = Depends(get_db)):
     Endpoint for database connection test purposes.
     """
     data = db.query(Hello).first()
-    return {"Stored value": data.name} if data else {"The database is empty."}
+    if data:
+        return {"Stored value": data.name}
+    else:
+        return {"message": "The database is empty."}
