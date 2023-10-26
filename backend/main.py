@@ -9,12 +9,12 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-@app.get("/")
-async def hello():
+@app.get("/ping")
+async def ping():
     """
     Endpoint for connection test purposes.
     """
-    return {"Hello": "World"}
+    return {"message": "pong!"}
 
 
 @app.get("/test_db")
@@ -24,6 +24,6 @@ async def test_database_connection(db: Session = Depends(get_db)):
     """
     data = db.query(Hello).first()
     if data:
-        return {"Stored value": data.name}
+        return {"message": f"Stored value: {data.name}"}
     else:
         return {"message": "The database is empty."}
