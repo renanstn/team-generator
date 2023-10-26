@@ -18,6 +18,7 @@ async def ping():
     """
     return {"message": "pong!"}
 
+
 @app.get("/test_db", response_model=Union[schemas.HelloSchema, dict])
 async def test_database_connection(db: Session = Depends(get_db)):
     """
@@ -25,6 +26,7 @@ async def test_database_connection(db: Session = Depends(get_db)):
     """
     data = db.query(models.Hello).first()
     return data if data else {"message": "The database is empty."}
+
 
 @app.get("/player", response_model=List[schemas.PlayerSchema])
 async def list_players(db: Session = Depends(get_db)):
@@ -34,6 +36,7 @@ async def list_players(db: Session = Depends(get_db)):
     data = db.query(models.Player).all()
     return data if data else {"message": "O banco de dados está vazio."}
 
+
 @app.get("/game", response_model=List[schemas.GameSchema])
 async def list_games(db: Session = Depends(get_db)):
     """
@@ -41,6 +44,7 @@ async def list_games(db: Session = Depends(get_db)):
     """
     data = db.query(models.Game).all()
     return data if data else {"message": "O banco de dados está vazio."}
+
 
 @app.post("/game", response_model=schemas.GameSchema)
 async def create_game(
@@ -54,6 +58,7 @@ async def create_game(
     db.commit()
     db.refresh(game_to_create)
     return game_to_create
+
 
 @app.post("/player", response_model=Union[schemas.PlayerSchema, dict])
 async def create_player(
