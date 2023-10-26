@@ -1,8 +1,10 @@
 import unittest
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
 from main import app
+from models import Hello
 
 
 class TestAPI(unittest.TestCase):
@@ -17,11 +19,13 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"Hello": "World"})
 
-    def test_database_connection(self):
+    def test_database_connection_without_data(self):
         """
         The test_db endpoint must connect to the database to get some data and
         return the value loaded.
         """
         response = self.client.get("/test_db")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {"Stored value": "test"})
+        self.assertEqual(
+            response.json(), {"message": "The database is empty."}
+        )
