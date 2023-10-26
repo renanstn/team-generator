@@ -2,10 +2,10 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
 from database import engine, get_db
-from models import Base, Hello
+import models, schemas
 
 
-Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
@@ -17,13 +17,10 @@ async def ping():
     return {"message": "pong!"}
 
 
-@app.get("/test_db")
+@app.get("/test_db", response_model=schemas.HelloSchema)
 async def test_database_connection(db: Session = Depends(get_db)):
     """
     Endpoint for database connection test purposes.
     """
-    data = db.query(Hello).first()
-    if data:
-        return {"message": f"Stored value: {data.name}"}
-    else:
-        return {"message": "The database is empty."}
+    data = db.query(models.Hello).first()
+    return data if data else {"message": "The database is empty."}
