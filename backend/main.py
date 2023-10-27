@@ -28,16 +28,7 @@ async def test_database_connection(db: Session = Depends(get_db)):
     return data if data else {"message": "The database is empty."}
 
 
-@app.get("/player", response_model=List[schemas.PlayerSchema])
-async def list_players(db: Session = Depends(get_db)):
-    """
-    Retorna os detalhes de um jogador do banco de dados.
-    """
-    data = db.query(models.Player).all()
-    return data if data else {"message": "O banco de dados está vazio."}
-
-
-@app.get("/game", response_model=List[schemas.GameSchema])
+@app.get("/games", response_model=List[schemas.GameSchema])
 async def list_games(db: Session = Depends(get_db)):
     """
     Retorna os detalhes de um jogo do banco de dados.
@@ -60,6 +51,15 @@ async def create_game(
     return game_to_create
 
 
+@app.get("/players", response_model=List[schemas.PlayerSchema])
+async def list_players(db: Session = Depends(get_db)):
+    """
+    Retorna os detalhes de um jogador do banco de dados.
+    """
+    data = db.query(models.Player).all()
+    return data if data else {"message": "O banco de dados está vazio."}
+
+
 @app.post("/player", response_model=Union[schemas.PlayerSchema, dict])
 async def create_player(
     game_id: int, player: schemas.PlayerInSchema, db: Session = Depends(get_db)
@@ -72,3 +72,11 @@ async def create_player(
     db.commit()
     db.refresh(player_to_create)
     return player_to_create
+
+
+@app.post("/generate_teams", response_model=List[schemas.TeamsSchema])
+async def generate_teams(game_id: int, db: Session = Depends(get_db)):
+    """
+    Generate game teams with random players
+    """
+    pass
