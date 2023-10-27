@@ -79,4 +79,11 @@ async def generate_teams(game_id: int, db: Session = Depends(get_db)):
     """
     Generate game teams with random players
     """
-    pass
+    game = db.query(models.Game).filter(id==game_id).first()
+    print(game)
+    if not game:
+        return {"message": f"Game id {game_id} not found."}
+    players = db.query(models.Player).filter(models.Player.game_id==game_id).all()
+    print(players)
+    if not players:
+        return {"message": f"This game has no players subscribed."}
