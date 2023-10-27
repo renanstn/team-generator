@@ -1,3 +1,4 @@
+from typing import List
 from datetime import date
 
 from pydantic import BaseModel
@@ -28,3 +29,10 @@ class PlayerSchema(BaseModel):
 
 class PlayerInSchema(BaseModel):
     name: str
+
+
+class TeamsSchema(BaseModel):
+    id: int
+    name: str
+    game: GameSchema
+    players: List[PlayerSchema]

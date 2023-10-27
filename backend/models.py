@@ -17,9 +17,11 @@ class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     date = Column(Date)
+    max_players_per_teams = Column(Integer)
     image = Column(String, nullable=True)
     closed = Column(Boolean, default=False)
     players = relationship("Player", back_populates="game")
+    teams = relationship("PlayerTeam", back_populates="teams")
 
 
 class Player(Base):
@@ -29,3 +31,15 @@ class Player(Base):
     name = Column(String)
     game_id = Column(Integer, ForeignKey("game.id"))
     game = relationship("Game", back_populates="players")
+    team = relationship("PlayerTeam", back_populates="teams")
+
+
+class PlayerTeam(Base):
+    __tablename__ = "player_team"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    player_id = Column(Integer, ForeignKey("player.id"))
+    game_id = Column(Integer, ForeignKey("game.id"))
+    player = relationship("Player", back_populates="teams")
+    game = relationship("Team", back_populates="teams")
