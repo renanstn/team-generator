@@ -15,27 +15,24 @@ app = FastAPI()
 
 @app.get("/ping")
 async def ping():
-    """
-    Endpoint for connection test purposes.
-    """
     return {"message": "pong!"}
 
 
 @app.get("/test_db", response_model=Union[schemas.HelloSchema, dict])
 async def test_database_connection(db: Session = Depends(get_db)):
-    """
-    Endpoint for database connection test purposes.
-    """
     data = db.query(models.Hello).first()
     return data if data else {"message": "The database is empty."}
 
 
 @app.get("/games", response_model=List[schemas.GameSchema])
 async def list_games(db: Session = Depends(get_db)):
-    """
-    Retorna os detalhes de um jogo do banco de dados.
-    """
     data = db.query(models.Game).all()
+    return data
+
+
+@app.get("/game/{game_id}", response_model=schemas.GameSchema)
+async def get_game(game_id: int, db: Session = Depends(get_db)):
+    data = db.query(models.Game).filter(models.Game.id == game_id).first()
     return data
 
 
@@ -59,6 +56,14 @@ async def list_players(db: Session = Depends(get_db)):
     Retorna os detalhes de um jogador do banco de dados.
     """
     data = db.query(models.Player).all()
+    return data
+
+
+@app.get("/player/{player_id}", response_model=schemas.PlayerSchema)
+async def get_game(player_id: int, db: Session = Depends(get_db)):
+    data = (
+        db.query(models.Player).filter(models.Player.id == player_id).first()
+    )
     return data
 
 
