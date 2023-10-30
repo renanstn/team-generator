@@ -1,3 +1,4 @@
+import random
 from typing import Union, List
 
 from fastapi import FastAPI, Depends
@@ -74,16 +75,29 @@ async def create_player(
     return player_to_create
 
 
-@app.post("/generate_teams", response_model=List[schemas.TeamsSchema])
+# @app.post("/generate_teams", response_model=List[schemas.TeamsSchema])
+@app.post("/generate_teams")
 async def generate_teams(game_id: int, db: Session = Depends(get_db)):
     """
     Generate game teams with random players
     """
-    game = db.query(models.Game).filter(id==game_id).first()
+    game = db.query(models.Game).filter(models.Game.id == game_id).first()
     print(game)
     if not game:
         return {"message": f"Game id {game_id} not found."}
-    players = db.query(models.Player).filter(models.Player.game_id==game_id).all()
-    print(players)
+    players = (
+        db.query(models.Player).filter(models.Player.game_id == game_id).all()
+    )
     if not players:
         return {"message": f"This game has no players subscribed."}
+    random.shuffle(players)
+    print(players)
+    teams = [
+        players[i : i + game.max_players_per_teams]
+        for i in range(0, len(players), game.max_players_per_teams)
+    ]
+    print(teams)
+    for team in teams:
+        print("--------------")
+        for player in team:
+            print(player.name)
