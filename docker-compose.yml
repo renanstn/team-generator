@@ -26,8 +26,8 @@ services:
       - ./backend:/app
     ports:
       - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+    # environment:
+    #   - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
 
   nginx:
     image: nginx:1.23
