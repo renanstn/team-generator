@@ -20,4 +20,5 @@ FROM base AS production
 
 RUN poetry install --without dev
 COPY . /app/
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$PORT"]
+RUN chmod +x start-production.sh
+CMD ["start-production.sh"]
