@@ -21,4 +21,4 @@ FROM base AS production
 RUN poetry install --without dev
 COPY . /app/
 RUN chmod +x start-production.sh
-CMD ["start-production.sh"]
+CMD ["./start-production.sh"]
