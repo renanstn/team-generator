@@ -13,6 +13,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
+# Tests endpoints -------------------------------------------------------------
 @app.get("/ping")
 async def ping():
     return {"message": "pong!"}
@@ -24,6 +25,7 @@ async def test_database_connection(db: Session = Depends(get_db)):
     return data if data else {"message": "The database is empty."}
 
 
+# Games endpoints -------------------------------------------------------------
 @app.get("/games", response_model=List[schemas.GameSchema])
 async def list_games(db: Session = Depends(get_db)):
     data = db.query(models.Game).all()
@@ -50,6 +52,7 @@ async def create_game(
     return game_to_create
 
 
+# Players endpoints -----------------------------------------------------------
 @app.get("/players", response_model=List[schemas.PlayerSchema])
 async def list_players(db: Session = Depends(get_db)):
     """
@@ -81,6 +84,7 @@ async def create_player(
     return player_to_create
 
 
+# Actions endpoints -----------------------------------------------------------
 # @app.post("/generate_teams", response_model=List[schemas.TeamsSchema])
 @app.post("/generate_teams")
 async def generate_teams(game_id: int, db: Session = Depends(get_db)):
