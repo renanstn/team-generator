@@ -1,3 +1,4 @@
+import string
 import random
 from typing import Union, List
 
@@ -35,7 +36,7 @@ async def list_games(db: Session = Depends(get_db)):
     Retorna os detalhes de um jogo do banco de dados.
     """
     data = db.query(models.Game).all()
-    return data if data else {"message": "O banco de dados está vazio."}
+    return data
 
 
 @app.post("/game", response_model=schemas.GameSchema)
@@ -58,7 +59,7 @@ async def list_players(db: Session = Depends(get_db)):
     Retorna os detalhes de um jogador do banco de dados.
     """
     data = db.query(models.Player).all()
-    return data if data else {"message": "O banco de dados está vazio."}
+    return data
 
 
 @app.post("/player", response_model=Union[schemas.PlayerSchema, dict])
@@ -81,23 +82,34 @@ async def generate_teams(game_id: int, db: Session = Depends(get_db)):
     """
     Generate game teams with random players
     """
+    # Check if game exists
     game = db.query(models.Game).filter(models.Game.id == game_id).first()
-    print(game)
     if not game:
         return {"message": f"Game id {game_id} not found."}
+    # Check if game has players joined
     players = (
         db.query(models.Player).filter(models.Player.game_id == game_id).all()
     )
     if not players:
         return {"message": f"This game has no players subscribed."}
+    # Shuffle players and create teams
     random.shuffle(players)
-    print(players)
+    teams_to_be_saved = []
     teams = [
         players[i : i + game.max_players_per_teams]
         for i in range(0, len(players), game.max_players_per_teams)
     ]
-    print(teams)
+    letters = string.ascii_uppercase
     for team in teams:
-        print("--------------")
-        for player in team:
-            print(player.name)
+        for index, player in enumerate(team):
+            teams_to_be_saved.append(
+                schemas.PlayerTeamInSchema(
+                    name=f"Team {letters[index]}",
+                    player_id=player.id,
+                    game_id=game.id,
+                )
+            )
+    db.bulk_insert_mappings(
+        models.PlayerTeam, [i.dict() for i in teams_to_be_saved]
+    )
+    db.commit()
