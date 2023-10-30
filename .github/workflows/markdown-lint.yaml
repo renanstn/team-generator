@@ -1,8 +1,10 @@
 name: Lint Markdown
+
 on:
   push:
     paths:
       - '**.md'
+
 jobs:
   lint:
     runs-on: ubuntu-latest
