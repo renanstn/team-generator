@@ -25,4 +25,5 @@ jobs:
         poetry install
     - name: Run tests
       run: |
+        cd backend
         python -m unittest discover
