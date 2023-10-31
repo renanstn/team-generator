@@ -61,11 +61,18 @@ class TestAPI(unittest.TestCase):
             "max_players_per_teams": 4,
             "image": "",
         }
+
         # Create game
         response = self.client.post("/game", json=payload)
         self.assertEqual(response.status_code, 200)
         # Get game id returned from endpoint
         game_id = response.json()["id"]
+
+        # Check if game return in a list of games
+        response = self.client.get("/games")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+
         # Check if the game was really created on the database
         created_game = self.client.get(f"/game/{game_id}")
         self.assertEqual(created_game.status_code, 200)
@@ -91,6 +98,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         # Get game id returned from endpoint
         game_id = response.json()["id"]
+
         # Now, add players to the game
         players_payload = [
             {"name": "player A"},
@@ -104,7 +112,13 @@ class TestAPI(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json()["name"], player["name"])
             self.assertEqual(response.json()["game_id"], game_id)
-        # Get this players
+
+        # Get these players and check
         players = self.client.get("/players")
         self.assertEqual(players.status_code, 200)
         self.assertEqual(len(players.json()), 3)
+        for index, expected_player in enumerate(players_payload):
+            self.assertEqual(
+                players.json()[index]["name"], expected_player["name"]
+            )
+            self.assertEqual(players.json()[index]["game_id"], 1)

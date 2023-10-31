@@ -21,7 +21,7 @@ class Game(Base):
     image = Column(String, nullable=True)
     closed = Column(Boolean, default=False)
     players = relationship("Player", back_populates="game")
-    teams = relationship("PlayerTeam", back_populates="game")
+    teams = relationship("Team", back_populates="game")
 
 
 class Player(Base):
@@ -30,16 +30,16 @@ class Player(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     game_id = Column(Integer, ForeignKey("game.id"))
+    team_id = Column(Integer, ForeignKey("team.id"))
     game = relationship("Game", back_populates="players")
-    team = relationship("PlayerTeam", back_populates="player")
+    team = relationship("Team", back_populates="players")
 
 
-class PlayerTeam(Base):
-    __tablename__ = "player_team"
+class Team(Base):
+    __tablename__ = "team"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    player_id = Column(Integer, ForeignKey("player.id"))
     game_id = Column(Integer, ForeignKey("game.id"))
-    player = relationship("Player", back_populates="team")
     game = relationship("Game", back_populates="teams")
+    players = relationship("Player", back_populates="team")

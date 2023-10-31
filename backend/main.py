@@ -43,9 +43,6 @@ async def get_game(game_id: int, db: Session = Depends(get_db)):
 async def create_game(
     game: schemas.GameInSchema, db: Session = Depends(get_db)
 ):
-    """
-    Endpoint for game creation.
-    """
     game_to_create = models.Game(**game.model_dump())
     db.add(game_to_create)
     db.commit()
@@ -56,9 +53,6 @@ async def create_game(
 # Players endpoints -----------------------------------------------------------
 @app.get("/players", response_model=List[schemas.PlayerSchema])
 async def list_players(db: Session = Depends(get_db)):
-    """
-    Retorna os detalhes de um jogador do banco de dados.
-    """
     data = db.query(models.Player).all()
     return data
 
@@ -85,41 +79,53 @@ async def create_player(
     return player_to_create
 
 
+# Teams endpoints -------------------------------------------------------------
+@app.get("/teams/{game_id}", response_model=List[schemas.TeamSchema])
+async def get_game_teams(game_id: int, db: Session = Depends(get_db)):
+    game = db.query(models.Game).filter(models.Game.id == game_id).first()
+    if not game:
+        return {"message": f"Game id {game_id} not found."}
+    data = db.query(models.Team).filter(models.Team.game_id == game_id).all()
+    return data
+
+
 # Actions endpoints -----------------------------------------------------------
-# @app.post("/generate_teams", response_model=List[schemas.TeamsSchema])
 @app.post("/generate_teams")
 async def generate_teams(game_id: int, db: Session = Depends(get_db)):
     """
-    Generate game teams with random players
+    Generate game teams with random players.
     """
     # Check if game exists
     game = db.query(models.Game).filter(models.Game.id == game_id).first()
     if not game:
         return {"message": f"Game id {game_id} not found."}
+
     # Check if game has players joined
     players = (
         db.query(models.Player).filter(models.Player.game_id == game_id).all()
     )
     if not players:
         return {"message": f"This game has no players subscribed."}
+
     # Shuffle players and create teams
     random.shuffle(players)
-    teams_to_be_saved = []
     teams = [
         players[i : i + game.max_players_per_teams]
         for i in range(0, len(players), game.max_players_per_teams)
     ]
+
+    # Create teams on database and update players team id
     letters = string.ascii_uppercase
-    for team in teams:
-        for index, player in enumerate(team):
-            teams_to_be_saved.append(
-                schemas.PlayerTeamInSchema(
-                    name=f"Team {letters[index]}",
-                    player_id=player.id,
-                    game_id=game.id,
-                )
-            )
-    db.bulk_insert_mappings(
-        models.PlayerTeam, [i.dict() for i in teams_to_be_saved]
-    )
-    db.commit()
+    for index, team in enumerate(teams):
+        team_to_create = models.Team(
+            name=f"Team {letters[index]}",
+            game_id=game.id,
+        )
+        db.add(team_to_create)
+        db.commit()
+        db.refresh(team_to_create)
+        for player in team:
+            player.team_id = team_to_create.id
+            db.commit()
+
+    return {"message": "Teams generated!"}

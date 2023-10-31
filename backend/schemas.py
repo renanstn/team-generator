@@ -33,14 +33,11 @@ class PlayerInSchema(BaseModel):
     name: str
 
 
-class PlayerTeamSchema(BaseModel):
-    id: int
+class TeamSchema(BaseModel):
     name: str
-    game: GameSchema
     players: List[PlayerSchema]
 
 
-class PlayerTeamInSchema(BaseModel):
+class TeamInSchema(BaseModel):
     name: str
-    player_id: int
     game_id: int
