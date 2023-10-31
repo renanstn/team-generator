@@ -104,3 +104,7 @@ class TestAPI(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json()["name"], player["name"])
             self.assertEqual(response.json()["game_id"], game_id)
+        # Get this players
+        players = self.client.get("/players")
+        self.assertEqual(players.status_code, 200)
+        self.assertEqual(len(players.json()), 3)
