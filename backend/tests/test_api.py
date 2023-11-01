@@ -122,3 +122,46 @@ class TestAPI(unittest.TestCase):
                 players.json()[index]["name"], expected_player["name"]
             )
             self.assertEqual(players.json()[index]["game_id"], 1)
+
+    def test_generate_teams(self):
+        """
+        Given a game and a few players, it must be possible to generate teams
+        for this game.
+        """
+        # Create game
+        game_payload = {
+            "name": "test",
+            "date": "2020-01-01",
+            "max_players_per_teams": 2,
+            "image": "",
+        }
+        response = self.client.post("/game", json=game_payload)
+        self.assertEqual(response.status_code, 200)
+        game_id = response.json()["id"]
+
+        # Add players
+        players_payload = [
+            {"name": "player A"},
+            {"name": "player B"},
+            {"name": "player C"},
+            {"name": "player D"},
+            {"name": "player E"},
+        ]
+        for player in players_payload:
+            response = self.client.post(
+                f"/player?game_id={game_id}", json=player
+            )
+            self.assertEqual(response.status_code, 200)
+
+        # Generate teams
+        response = self.client.post(f"/generate_teams?game_id={game_id}")
+        self.assertEqual(response.status_code, 200)
+        generated_teams = self.client.get(f"/teams/{game_id}")
+        self.assertEqual(generated_teams.status_code, 200)
+
+        # 3 teams must be created, 2 teams with 2 players each, and one team
+        # with only one player.
+        self.assertEqual(len(generated_teams.json()), 3)
+        self.assertEqual(len(generated_teams.json()[0]["players"]), 2)
+        self.assertEqual(len(generated_teams.json()[1]["players"]), 2)
+        self.assertEqual(len(generated_teams.json()[2]["players"]), 1)
