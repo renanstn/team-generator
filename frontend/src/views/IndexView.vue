@@ -1,3 +1,3 @@
 <template>
-    Hello!
+    Hello from Vue!
 </template>
