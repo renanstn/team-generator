@@ -29,6 +29,16 @@ services:
     # environment:
     #   - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
 
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+      # - "80:80"
+
   nginx:
     image: nginx:1.23
     volumes:
