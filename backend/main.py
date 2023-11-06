@@ -3,6 +3,7 @@ import random
 from typing import Union, List
 
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from database import engine, get_db
@@ -12,6 +13,14 @@ import models, schemas
 # Create models if not exist
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+# CORS config
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Tests endpoints -------------------------------------------------------------
