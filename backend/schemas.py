@@ -23,14 +23,14 @@ class GameSchema(BaseModel):
     id: int
     name: str
     date: date
-    max_players_per_teams: int
+    max_players_per_team: int
     players: List[PlayerSchema]
 
 
 class GameInSchema(BaseModel):
     name: str
     date: date
-    max_players_per_teams: int
+    max_players_per_team: int
     image: str = None
 
 

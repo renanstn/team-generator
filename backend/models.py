@@ -17,7 +17,7 @@ class Game(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     date = Column(Date)
-    max_players_per_teams = Column(Integer)
+    max_players_per_team = Column(Integer)
     image = Column(String, nullable=True)
     closed = Column(Boolean, default=False)
     players = relationship("Player", back_populates="game")

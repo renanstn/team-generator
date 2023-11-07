@@ -119,8 +119,8 @@ async def generate_teams(game_id: int, db: Session = Depends(get_db)):
     # Shuffle players and create teams
     random.shuffle(players)
     teams = [
-        players[i : i + game.max_players_per_teams]
-        for i in range(0, len(players), game.max_players_per_teams)
+        players[i : i + game.max_players_per_team]
+        for i in range(0, len(players), game.max_players_per_team)
     ]
 
     # Create teams on database and update players team id

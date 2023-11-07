@@ -58,7 +58,7 @@ class TestAPI(unittest.TestCase):
         payload = {
             "name": "test",
             "date": "2020-01-01",
-            "max_players_per_teams": 4,
+            "max_players_per_team": 4,
             "image": "",
         }
 
@@ -78,8 +78,8 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(created_game.status_code, 200)
         self.assertEqual(created_game.json()["name"], payload["name"])
         self.assertEqual(
-            created_game.json()["max_players_per_teams"],
-            payload["max_players_per_teams"],
+            created_game.json()["max_players_per_team"],
+            payload["max_players_per_team"],
         )
         self.assertEqual(created_game.json()["date"], payload["date"])
 
@@ -91,7 +91,7 @@ class TestAPI(unittest.TestCase):
         game_payload = {
             "name": "test",
             "date": "2020-01-01",
-            "max_players_per_teams": 4,
+            "max_players_per_team": 4,
             "image": "",
         }
         response = self.client.post("/game", json=game_payload)
@@ -132,7 +132,7 @@ class TestAPI(unittest.TestCase):
         game_payload = {
             "name": "test",
             "date": "2020-01-01",
-            "max_players_per_teams": 2,
+            "max_players_per_team": 2,
             "image": "",
         }
         response = self.client.post("/game", json=game_payload)
