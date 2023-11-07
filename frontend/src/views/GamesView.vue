@@ -1,43 +1,65 @@
 <template>
-  <div>
+  <div class="amber lighten-4">
+    <Navbar/>
 
-    <h3>Active games</h3>
-    <ul>
-      <li v-for="game in games" :key="game.id">
-        {{ game.name }} <button @click.prevent="generate_teams">Generate Teams</button>
-      </li>
-    </ul>
+    <div class="container">
+      <div class="row valign-wrapper">
+        <div class="col s10">
+          <h4>Active games</h4>
+        </div>
+        <div class="col s2">
+          <a class="waves-effect waves-light btn amber darken-4">Create Game</a>
+        </div>
+      </div>
 
-    <h3>Create Game</h3>
-    <form @submit.prevent="create_game">
-      <label for="game-date">Game Date</label>
-      <input type="date" name="game-date" id="game-date" v-model="game.date">
-      <br>
-      <label for="game-name">Name</label>
-      <input type="text" name="game-name" id="game-name" v-model="game.name">
-      <br>
-      <label for="max-players-per-team">Max Players per Team</label>
-      <input type="number" name="max-players-per-team" id="max-players-per-team" v-model="game.max_players_per_team">
-      <br>
-      <input type="submit" value="Create Game">
-    </form>
+      <GameTable :games="games"/>
 
-    <h3>Join Game</h3>
-    <form @submit.prevent="join_game">
-      <label for="game-id">Game ID</label>
-      <input type="number" name="game-id" id="game-id" v-model="game_id">
-      <br>
-      <label for="player-name">Player Name</label>
-      <input type="text" name="player-name" id="player-name" v-model="player.name">
-      <br>
-      <input type="submit" value="Join Game">
-    </form>
+      <ul>
+        <li v-for="game in games" :key="game.id">
+          {{ game.id }}: {{ game.name }}
+          <button @click.prevent="generate_teams">Generate Teams</button>
+        </li>
+      </ul>
+
+      <h3>Create Game</h3>
+      <form @submit.prevent="create_game">
+        <label for="game-date">Game Date</label>
+        <input type="date" name="game-date" id="game-date" v-model="game.date">
+        <br>
+        <label for="game-name">Name</label>
+        <input type="text" name="game-name" id="game-name" v-model="game.name">
+        <br>
+        <label for="max-players-per-team">Max Players per Team</label>
+        <input type="number" name="max-players-per-team" id="max-players-per-team" v-model="game.max_players_per_team">
+        <br>
+        <input type="submit" value="Create Game">
+      </form>
+
+      <h3>Join Game</h3>
+      <form @submit.prevent="join_game">
+        <label for="game-id">Game ID</label>
+        <input type="number" name="game-id" id="game-id" v-model="game_id">
+        <br>
+        <label for="player-name">Player Name</label>
+        <input type="text" name="player-name" id="player-name" v-model="player.name">
+        <br>
+        <input type="submit" value="Join Game">
+      </form>
+    </div>
 
   </div>
 </template>
 
 <script>
+import Navbar from '@/components/Navbar.vue'
+import GameTable from '@/components/GameTable.vue'
+
 export default {
+  components: {
+    Navbar,
+    GameTable,
+  },
+
   data() {
     return {
       games: [],
