@@ -1,39 +1,19 @@
 <template>
   <div class="amber lighten-4">
     <Navbar/>
+    <CreateGameModal/>
 
     <div class="container">
       <div class="row valign-wrapper">
-        <div class="col s10">
+        <div class="col s9">
           <h4>Active games</h4>
         </div>
-        <div class="col s2">
-          <a class="waves-effect waves-light btn amber darken-4">Create Game</a>
+        <div class="col s3">
+          <a class="waves-effect waves-light btn amber darken-4 modal-trigger" href="#modal-create-game">Create Game</a>
         </div>
       </div>
 
       <GameTable :games="games"/>
-
-      <ul>
-        <li v-for="game in games" :key="game.id">
-          {{ game.id }}: {{ game.name }}
-          <button @click.prevent="generate_teams">Generate Teams</button>
-        </li>
-      </ul>
-
-      <h3>Create Game</h3>
-      <form @submit.prevent="create_game">
-        <label for="game-date">Game Date</label>
-        <input type="date" name="game-date" id="game-date" v-model="game.date">
-        <br>
-        <label for="game-name">Name</label>
-        <input type="text" name="game-name" id="game-name" v-model="game.name">
-        <br>
-        <label for="max-players-per-team">Max Players per Team</label>
-        <input type="number" name="max-players-per-team" id="max-players-per-team" v-model="game.max_players_per_team">
-        <br>
-        <input type="submit" value="Create Game">
-      </form>
 
       <h3>Join Game</h3>
       <form @submit.prevent="join_game">
@@ -53,22 +33,18 @@
 <script>
 import Navbar from '@/components/Navbar.vue'
 import GameTable from '@/components/GameTable.vue'
+import CreateGameModal from '@/components/CreateGameModal.vue'
 
 export default {
   components: {
     Navbar,
     GameTable,
+    CreateGameModal
   },
 
   data() {
     return {
       games: [],
-      game: {
-        date: null,
-        name: null,
-        max_players_per_team: null,
-        // image: null,
-      },
       game_id: null,
       player: {
         name: null,
@@ -92,25 +68,6 @@ export default {
       })
       .catch(error => {
         console.log("Error on load games:", error)
-      })
-    },
-
-    create_game() {
-      const url = "http://localhost:8000/game/"
-      const data = this.game
-
-      fetch(url, {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-      })
-      .then(response => {
-        if (!response.ok) {throw new Error('Error sendind request')}
-        return response.json()
-      })
-      .then(data => {
-        console.log(data)
-        this.load_games()
       })
     },
 
