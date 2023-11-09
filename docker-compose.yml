@@ -39,10 +39,3 @@ services:
     ports:
       - "5173:5173"
       # - "80:80"
-
-  nginx:
-    image: nginx:1.23
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "80:80"
