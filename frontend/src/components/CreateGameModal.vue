@@ -19,7 +19,8 @@
 
           <div class="input-field col s3">
             <label for="max-players-per-team">Max Players per Team</label>
-            <input type="number" name="max-players-per-team" id="max-players-per-team" v-model="game.max_players_per_team">
+            <input type="number" name="max-players-per-team" id="max-players-per-team"
+              v-model="game.max_players_per_team">
           </div>
         </div>
       </form>
@@ -65,16 +66,16 @@ export default {
 
       fetch(url, {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
-      .then(response => {
-        if (!response.ok) {throw new Error('Error sendind request')}
-        return response.json()
-      })
-      .then(data => {
-        console.log(data)
-      })
+        .then(response => {
+          if (!response.ok) { throw new Error('Error sendind request') }
+          return response.json()
+        })
+        .then(_ => {
+          this.$emit('onClose')
+        })
     },
   }
 }
