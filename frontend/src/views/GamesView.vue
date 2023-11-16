@@ -1,5 +1,5 @@
 <template>
-  <div class="amber lighten-4">
+  <div class="base amber lighten-4">
     <Navbar />
     <CreateGameModal @onClose="load_games" />
 
@@ -18,6 +18,13 @@
     </div>
   </div>
 </template>
+
+
+<style scoped>
+.base {
+  height: 100vh;
+}
+</style>
 
 
 <script>
