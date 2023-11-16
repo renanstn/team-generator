@@ -51,6 +51,9 @@ export default {
     // Init modals component
     var modal_elements = document.querySelectorAll('.modal')
     M.Modal.init(modal_elements)
+    // Init tooltips
+    var tooltips_elements = document.querySelectorAll('.tooltipped');
+    M.Tooltip.init(tooltips_elements);
   },
 
   methods: {
