@@ -13,7 +13,7 @@
       <tr v-for="game in games" :key="game.id">
         <td>{{ game.name }}</td>
         <td>{{ game.date }}</td>
-        <td>{{ game.players.length }}</td>
+        <td class="tooltipped" data-tooltip="I am a tooltip">{{ game.players.length }}</td>
         <td>
           <a class="waves-effect waves-light btn amber darken-4 modal-trigger" href="#modal-join-game"
             @click="game_id = game.id">Join</a>
