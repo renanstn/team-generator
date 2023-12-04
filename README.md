@@ -20,13 +20,17 @@
 
 ## Desenvolvimento
 
-Suba o projeto com o comando:
+Suba o projeto todo com o comando:
 
 ```sh
 docker-compose up
 ```
 
-Acesse a documentação da api em:
+Acesse:
+
+- `http://localhost:5173`
+
+a documentação da API ficará disponível em:
 
 - `http://localhost:8000/docs`
 
