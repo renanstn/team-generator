@@ -17,7 +17,8 @@
         <td>
           <a class="waves-effect waves-light btn amber darken-4 modal-trigger" href="#modal-join-game"
             @click="game_id = game.id">Join</a>
-          <a class="waves-effect waves-light btn amber darken-4" style="margin-left: 10px;" @click="generate_team(game.id)">Generate Teams</a>
+          <a class="waves-effect waves-light btn amber darken-4" style="margin-left: 10px;"
+            @click="generate_team(game.id)">Generate Teams</a>
         </td>
       </tr>
     </tbody>
@@ -54,7 +55,12 @@ export default {
     },
 
     generate_team(game_id) {
-      console.log(game_id);
+      const url = `http://localhost:8000/generate_teams?game_id=${game_id}`
+
+      fetch(url, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+      })
     },
   }
 }
