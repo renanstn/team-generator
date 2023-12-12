@@ -1,10 +1,15 @@
 <template>
   <el-container>
     <el-header>
-      <Navbar />
+      <el-row class="navbar" align="middle">
+        <el-col :span="12">
+          <h1>Team Generator</h1>
+        </el-col>
+        <el-col :span="12" class="login-button">
+          <el-button type="primary" round>Login</el-button>
+        </el-col>
+      </el-row>
     </el-header>
-
-    <!-- <CreateGameModal @onClose="load_games" /> -->
 
     <el-main>
       <el-row align="middle">
@@ -19,7 +24,22 @@
         </el-col>
       </el-row>
 
-      <GameTable :games="games" />
+      <el-table :data="games" stripe>
+        <el-table-column prop="name" label="Name" />
+        <el-table-column prop="date" label="Date" />
+        <el-table-column prop="players.length" label="Players joined" />
+        <el-table-column prop="max_players_per_team" label="Player per team" />
+        <el-table-column label="Actions" >
+          <template #default="scope">
+            <el-button type="success" round @click="open_join_game_modal(scope.row.id)">
+              Join
+            </el-button>
+            <el-button type="warning" round>Generate teams</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- Modals --------------------------------------------------------- -->
 
       <el-dialog
         title="Create game"
@@ -53,12 +73,37 @@
         </template>
       </el-dialog>
 
+      <el-dialog
+        title="Enter player name"
+        v-model="join_game_visible"
+        :close-on-click-modal="false"
+      >
+        <el-form :model="join_form">
+          <el-form-item label="Player name">
+            <el-input v-model="join_form.name"></el-input>
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <el-button @click="join_game_visible=false">Cancel</el-button>
+          <el-button type="primary" @click="join_game">Confirm</el-button>
+        </template>
+      </el-dialog>
+
     </el-main>
   </el-container>
 </template>
 
 
 <style scoped>
+.navbar {
+  background-color: #e0e9f0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.login-button {
+  text-align: right;
+}
 .create-game-button {
   text-align: right;
 }
@@ -66,24 +111,21 @@
 
 
 <script>
-import Navbar from '@/components/Navbar.vue'
-import GameTable from '@/components/GameTable.vue'
-import CreateGameModal from '@/components/CreateGameModal.vue'
+import { ElMessage } from 'element-plus'
 
 export default {
-  components: {
-    Navbar,
-    GameTable,
-    CreateGameModal,
-  },
-
   data() {
     return {
+      game_id: null,
       games: [],
       player: {
         name: null,
       },
       create_game_visible: false,
+      join_game_visible: false,
+      join_form: {
+        name: null,
+      },
       game_form: {
         date: null,
         name: null,
@@ -115,9 +157,14 @@ export default {
         })
     },
 
+    open_join_game_modal(game_id) {
+      this.game_id = game_id
+      this.join_game_visible = true
+    },
+
     join_game() {
       const url = `http://localhost:8000/player?game_id=${this.game_id}`
-      const data = this.player
+      const data = this.join_form
 
       fetch(url, {
         method: "POST",
@@ -128,9 +175,22 @@ export default {
           if (!response.ok) { throw new Error('Error sendind request') }
           return response.json()
         })
-        .then(data => {
-          this.load_games()
+        .then(() => {
+          ElMessage({message: 'Player joined!', type: 'success'})
         })
+        .finally(() => {
+          this.load_games()
+          this.join_game_visible = false
+        })
+    },
+
+    generate_team(game_id) {
+      const url = `http://localhost:8000/generate_teams?game_id=${game_id}`
+
+      fetch(url, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+      })
     },
 
     create_game() {
