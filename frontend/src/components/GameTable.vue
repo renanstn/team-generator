@@ -2,6 +2,7 @@
   <el-table :data="games" stripe>
     <el-table-column prop="name" label="Name" />
     <el-table-column prop="date" label="Date" />
+    <el-table-column prop="players.length" label="Players joined" />
     <el-table-column prop="max_players_per_team" label="Player per team" />
     <el-table-column label="Actions" >
       <template #default="scope">
@@ -11,7 +12,7 @@
     </el-table-column>
   </el-table>
 
-  <el-dialog title="Enter player name" v-model="join_game_visible">
+  <el-dialog title="Enter player name" v-model="join_game_visible" :close-on-click-modal="false">
     <el-form :model="form">
       <el-form-item label="Player name">
         <el-input v-model="form.name"></el-input>
