@@ -1,38 +1,32 @@
 <template>
-  <div id="modal-join-game" class="modal amber lighten-3">
-    <div class="modal-content">
+  <el-dialog title="Enter player name" v-model="join_game_visible">
+    <el-form :model="form">
+      <el-form-item label="Player name">
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+    </el-form>
 
-      <h3>Join Game</h3>
-
-      <form @submit.prevent="join_game">
-        <div class="row">
-
-          <div class="input-field col s12">
-            <label for="player-name">Player name</label>
-            <input type="text" name="player-name" id="player-name" v-model="player.name">
-          </div>
-
-        </div>
-      </form>
-
-    </div>
-    <div class="modal-footer amber lighten-3">
-      <button class="btn waves-effect waves-light amber darken-4 modal-close" @click="join_game">Join</button>
-    </div>
-  </div>
+    <template #footer>
+      <el-button @click="dialogFormVisible = false">Cancel</el-button>
+      <el-button type="primary" @click="dialogFormVisible = false">
+        Confirm
+      </el-button>
+    </template>
+  </el-dialog>
 </template>
 
 
 <script>
 export default {
   props: {
-    game_id: Number
+    game_id: Number,
   },
 
   data() {
     return {
       player: {
-        name: null
+        name: null,
+        join_game_visible: false
       }
     }
   },

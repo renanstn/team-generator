@@ -1,28 +1,32 @@
 <template>
-  <div class="base amber lighten-4">
-    <Navbar />
-    <CreateGameModal @onClose="load_games" />
+  <el-container>
+    <el-header>
+      <Navbar />
+    </el-header>
 
-    <div class="container">
-      <div class="row valign-wrapper">
-        <div class="col s9">
-          <h4>Active games</h4>
-        </div>
-        <div class="col s3">
-          <a class="waves-effect waves-light btn amber darken-4 modal-trigger" href="#modal-create-game">Create Game</a>
-        </div>
-      </div>
+    <!-- <CreateGameModal @onClose="load_games" /> -->
 
-      <GameTable :games="games" @playerAdd="load_games" />
+    <el-main>
+      <el-row align="middle">
+        <el-col :span="12">
+          <h3>Active games</h3>
+        </el-col>
 
-    </div>
-  </div>
+        <el-col :span="12" class="create-game-button">
+          <el-button type="primary" round>Create game</el-button>
+        </el-col>
+      </el-row>
+
+      <GameTable :games="games" />
+
+    </el-main>
+  </el-container>
 </template>
 
 
 <style scoped>
-.base {
-  height: 100vh;
+.create-game-button {
+  text-align: right;
 }
 </style>
 
