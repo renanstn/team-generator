@@ -34,7 +34,12 @@
             <el-button type="success" round @click="open_join_game_modal(scope.row.id)">
               Join
             </el-button>
-            <el-button type="warning" round>Generate teams</el-button>
+            <el-button type="primary" round @click="show_teams(scope.row.id)">
+              Show teams
+            </el-button>
+            <el-button type="warning" round @click="generate_team(scope.row.id)">
+              Generate teams
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -115,6 +120,17 @@
         </template>
       </el-dialog>
 
+      <!-- Teams modal ---------------------------------------------------- -->
+      <el-dialog title="Teams" v-model="teams_visible">
+        <div v-for="(team, index) in teams" :key="index">
+          <h4>{{ team.name }}</h4>
+          <el-table :data="team.players" border>
+            <el-table-column prop="name" label="Player" />
+          </el-table>
+          <el-divider />
+        </div>
+      </el-dialog>
+
     </el-main>
   </el-container>
 </template>
@@ -143,12 +159,14 @@ export default {
     return {
       game_id: null,
       games: [],
+      teams: [],
       player: {
         name: null,
       },
       create_game_visible: false,
       join_game_visible: false,
       login_visible: false,
+      teams_visible: false,
       login_form: {
         user: null,
         pass: null,
@@ -238,6 +256,13 @@ export default {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
       })
+        .then(response => {
+          if (!response.ok) { throw new Error('Error sendind request') }
+          return response.json()
+        })
+        .then(() => {
+          ElMessage({message: 'Teams generated!', type: 'success'})
+        })
     },
 
     create_game() {
@@ -256,6 +281,21 @@ export default {
         .finally(() => {
           this.create_game_visible = false
           this.load_games()
+        })
+    },
+
+    show_teams(game_id) {
+      const url = `http://localhost:8000/teams/${game_id}`
+
+      fetch(url, {method: "GET"})
+        .then(response => {
+          if (!response.ok) { throw new Error('Error sendind request') }
+          return response.json()
+        })
+        .then(data => {
+          console.log(data)
+          this.teams = data
+          this.teams_visible = true
         })
     },
   },
