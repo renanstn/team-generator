@@ -6,7 +6,7 @@
           <h1>Team Generator</h1>
         </el-col>
         <el-col :span="12" class="login-button">
-          <el-button type="primary" round>Login</el-button>
+          <el-button type="primary" round @click="open_login_modal">Login</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -39,8 +39,31 @@
         </el-table-column>
       </el-table>
 
-      <!-- Modals --------------------------------------------------------- -->
+      <!-- Login modal ---------------------------------------------------- -->
+      <el-dialog
+        title="Login"
+        v-model="login_visible"
+        :close-on-click-modal="false"
+        @opened="handle_login_modal_opened"
+      >
+        <el-form :model="login_form" label-position="top" @submit.prevent="login">
 
+          <el-form-item label="User" prop="user">
+            <el-input v-model="login_form.user" placeholder="Type your username" ref="user_input" />
+          </el-form-item>
+
+          <el-form-item label="Password" prop="pass">
+            <el-input type="password" v-model="login_form.pass" placeholder="Type your password" show-password />
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <el-button @click="login_visible=false">Cancel</el-button>
+          <el-button type="primary" @click="login">Confirm</el-button>
+        </template>
+      </el-dialog>
+
+      <!-- Create game modal ---------------------------------------------- -->
       <el-dialog
         title="Create game"
         v-model="create_game_visible"
@@ -73,14 +96,16 @@
         </template>
       </el-dialog>
 
+      <!-- Join game modal ------------------------------------------------ -->
       <el-dialog
         title="Enter player name"
         v-model="join_game_visible"
         :close-on-click-modal="false"
+        @opened="handle_join_game_opened"
       >
-        <el-form :model="join_form">
+        <el-form :model="join_form" @submit.prevent="join_game">
           <el-form-item label="Player name">
-            <el-input v-model="join_form.name"></el-input>
+            <el-input v-model="join_form.name" ref="player_name" />
           </el-form-item>
         </el-form>
 
@@ -123,6 +148,11 @@ export default {
       },
       create_game_visible: false,
       join_game_visible: false,
+      login_visible: false,
+      login_form: {
+        user: null,
+        pass: null,
+      },
       join_form: {
         name: null,
       },
@@ -162,6 +192,22 @@ export default {
       this.join_game_visible = true
     },
 
+    open_login_modal() {
+      this.login_visible = true
+    },
+
+    handle_login_modal_opened() {
+      this.$refs.user_input.focus()
+    },
+
+    login() {
+      console.log('TODO')
+    },
+
+    handle_join_game_opened() {
+      this.$refs.player_name.focus()
+    },
+
     join_game() {
       const url = `http://localhost:8000/player?game_id=${this.game_id}`
       const data = this.join_form
@@ -179,6 +225,7 @@ export default {
           ElMessage({message: 'Player joined!', type: 'success'})
         })
         .finally(() => {
+          for (const i in this.join_form) { this.join_form[i] = null }
           this.load_games()
           this.join_game_visible = false
         })
@@ -196,7 +243,6 @@ export default {
     create_game() {
       const url = "http://localhost:8000/game/"
       const data = this.game_form
-      console.log(this.game_form.date);
 
       fetch(url, {
         method: "POST",
