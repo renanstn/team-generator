@@ -138,3 +138,13 @@ async def generate_teams(game_id: int, db: Session = Depends(get_db)):
             db.commit()
 
     return {"message": "Teams generated!"}
+
+@app.get("/print_resume")
+async def print_resume(self, game_id: int, db: Session = Depends(get_db)):
+    """
+    Generate the game resume as a PDF file.
+    """
+    # Check if game exists
+    game = db.query(models.Game).filter(models.Game.id == game_id).first()
+    if not game:
+        return {"message": f"Game id {game_id} not found."}
