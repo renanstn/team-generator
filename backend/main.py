@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from database import engine, get_db
 import models, schemas
+from generate_pdf import create_team_pdf
 
 
 # Create models if not exist
@@ -139,8 +140,9 @@ async def generate_teams(game_id: int, db: Session = Depends(get_db)):
 
     return {"message": "Teams generated!"}
 
+
 @app.get("/print_resume")
-async def print_resume(self, game_id: int, db: Session = Depends(get_db)):
+async def print_resume(game_id: int, db: Session = Depends(get_db)):
     """
     Generate the game resume as a PDF file.
     """
@@ -148,3 +150,10 @@ async def print_resume(self, game_id: int, db: Session = Depends(get_db)):
     game = db.query(models.Game).filter(models.Game.id == game_id).first()
     if not game:
         return {"message": f"Game id {game_id} not found."}
+    teams = db.query(models.Team).filter(models.Team.game_id == game_id).all()
+    teams_as_dict = []
+    for team in teams:
+        for player in team.players:
+            print(player.__dict__)
+
+    # create_team_pdf(teams_as_dict)
