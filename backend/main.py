@@ -151,9 +151,11 @@ async def print_resume(game_id: int, db: Session = Depends(get_db)):
     if not game:
         return {"message": f"Game id {game_id} not found."}
     teams = db.query(models.Team).filter(models.Team.game_id == game_id).all()
-    teams_as_dict = []
+    teams_as_list = []
     for team in teams:
+        team_schema = schemas.TeamSchema(**team.__dict__, players=list())
         for player in team.players:
-            print(player.__dict__)
+            team_schema.players.append(schemas.PlayerSchema(**player.__dict__))
+        teams_as_list.append(team_schema.model_dump())
 
-    # create_team_pdf(teams_as_dict)
+    create_team_pdf(teams_as_list)
