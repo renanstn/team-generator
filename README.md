@@ -20,6 +20,20 @@
 
 ## Desenvolvimento
 
+### Stack
+
+- Backend
+    - Poetry
+    - FastAPI
+    - Uvicorn
+    - Reportlab
+    - Postgres
+- Frontend
+    - Vue 3
+    - Element plus
+
+### Setup
+
 Suba o projeto todo com o comando:
 
 ```sh
@@ -30,7 +44,7 @@ Acesse:
 
 - `http://localhost:5173`
 
-a documentação da API ficará disponível em:
+A documentação da API ficará disponível em:
 
 - `http://localhost:8000/docs`
 
@@ -39,7 +53,7 @@ Caso queira visualizar os dados brutos no banco de dados, você pode utilizar o
 
 - `http://localhost:8080`
 
-## Testes unitários
+### Testes unitários
 
 ```sh
 docker-compose run --rm --no-deps api pytest
