@@ -29,7 +29,7 @@
         <el-table-column prop="date" label="Date" />
         <el-table-column prop="players.length" label="Players joined" />
         <el-table-column prop="max_players_per_team" label="Player per team" />
-        <el-table-column label="Actions" >
+        <el-table-column label="Actions" min-width="120px" >
           <template #default="scope">
             <el-button type="success" round @click="open_join_game_modal(scope.row.id)">
               Join
@@ -293,7 +293,6 @@ export default {
           return response.json()
         })
         .then(data => {
-          console.log(data)
           this.teams = data
           this.teams_visible = true
         })
